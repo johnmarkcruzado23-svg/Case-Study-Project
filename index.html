@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KHS Student Information Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Kapitolyo High School</h1>
+    <h2>Student Information Management System</h2>
+
+    <!-- Login -->
+    <section id="loginPage">
+        <h3>Login</h3>
+        <form id="loginForm">
+            <label>Username:</label>
+            <input type="text" id="username" required>
+            <br><br>
+
+            <label>Password:</label>
+            <input type="password" id="password" required>
+            <br><br>
+
+            <button type="submit">Login</button>
+            <p id="loginError"></p>
+        </form>
+        <p>Demo account: admin / admin123</p>
+    </section>
+
+    <!-- Main System -->
+    <div id="app" class="hidden">
+        <hr>
+        <nav>
+            <button data-page="dashboard">Dashboard</button>
+            <button data-page="students">Student Management</button>
+            <button data-page="add">Add Student</button>
+            <button data-page="search">Search Students</button>
+            <button data-page="reports">Reports</button>
+            <button data-page="users">User Management</button>
+            <button id="logoutBtn">Logout</button>
+        </nav>
+        <hr>
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="page">
+            <h3>Dashboard</h3>
+            <p>Total Students: <span id="totalStudents">0</span></p>
+            <p>Active Students: <span id="activeStudents">0</span></p>
+            <p>Grade 11 Students: <span id="grade11">0</span></p>
+            <p>Grade 12 Students: <span id="grade12">0</span></p>
+
+            <h4>Recent Students</h4>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Grade</th>
+                        <th>Strand</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="recentStudents"></tbody>
+            </table>
+        </section>
+
+        <!-- Student Management -->
+        <section id="students" class="page hidden">
+            <h3>Student Management</h3>
+            <input id="studentQuickSearch" placeholder="Search student">
+            <button id="exportBtn">Export CSV</button>
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Grade</th>
+                        <th>Strand</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="studentsTable"></tbody>
+            </table>
+        </section>
+
+        <!-- Add Student -->
+        <section id="add" class="page hidden">
+            <h3 id="studentFormTitle">Add Student</h3>
+
+            <form id="studentForm">
+                <input type="hidden" id="editOriginalId">
+
+                <label>Student ID:</label>
+                <input id="studentId" required>
+                <br><br>
+
+                <label>Full Name:</label>
+                <input id="fullName" required>
+                <br><br>
+
+                <label>Grade Level:</label>
+                <select id="grade" required>
+                    <option value="">Select Grade</option>
+                    <option>Grade 11</option>
+                    <option>Grade 12</option>
+                </select>
+                <br><br>
+
+                <label>Strand:</label>
+                <select id="strand" required>
+                    <option value="">Select Strand</option>
+                    <option>STEM</option>
+                    <option>ABM</option>
+                    <option>HUMSS</option>
+                    <option>GAS</option>
+                    <option>TVL</option>
+                    <option>Arts and Design</option>
+                    <option>Sports</option>
+                </select>
+                <br><br>
+
+                <label>Contact Number:</label>
+                <input id="contact">
+                <br><br>
+
+                <label>Email:</label>
+                <input id="email" type="email">
+                <br><br>
+
+                <label>Date of Birth:</label>
+                <input id="dob" type="date">
+                <br><br>
+
+                <label>Gender:</label>
+                <select id="gender">
+                    <option value="">Select Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Prefer not to say</option>
+                </select>
+                <br><br>
+
+                <label>Address:</label>
+                <textarea id="address"></textarea>
+                <br><br>
+
+                <label>Status:</label>
+                <select id="status">
+                    <option>Active</option>
+                    <option>Inactive</option>
+                    <option>Graduated</option>
+                </select>
+                <br><br>
+
+                <label>Date Added:</label>
+                <input id="dateAdded" type="date">
+                <br><br>
+
+                <button type="submit">Save Student</button>
+                <button type="button" id="cancelStudent">Cancel</button>
+            </form>
+        </section>
+
+        <!-- Search and Filter -->
+        <section id="search" class="page hidden">
+            <h3>Search and Filter Students</h3>
+
+            <label>Name or Student ID:</label>
+            <input id="searchText">
+            <br><br>
+
+            <label>Grade:</label>
+            <select id="filterGrade">
+                <option value="">All Grades</option>
+                <option>Grade 11</option>
+                <option>Grade 12</option>
+            </select>
+            <br><br>
+
+            <label>Strand:</label>
+            <select id="filterStrand">
+                <option value="">All Strands</option>
+                <option>STEM</option>
+                <option>ABM</option>
+                <option>HUMSS</option>
+                <option>GAS</option>
+                <option>TVL</option>
+                <option>Arts and Design</option>
+                <option>Sports</option>
+            </select>
+            <br><br>
+
+            <label>Status:</label>
+            <select id="filterStatus">
+                <option value="">All Statuses</option>
+                <option>Active</option>
+                <option>Inactive</option>
+                <option>Graduated</option>
+            </select>
+            <br><br>
+
+            <button id="clearFilters">Clear Filters</button>
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Grade</th>
+                        <th>Strand</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="searchResults"></tbody>
+            </table>
+            <p id="searchCount"></p>
+        </section>
+
+        <!-- Reports -->
+        <section id="reports" class="page hidden">
+            <h3>Student Reports</h3>
+
+            <label>Grade:</label>
+            <select id="reportGrade">
+                <option value="">All Grades</option>
+                <option>Grade 11</option>
+                <option>Grade 12</option>
+            </select>
+
+            <label>Strand:</label>
+            <select id="reportStrand">
+                <option value="">All Strands</option>
+                <option>STEM</option>
+                <option>ABM</option>
+                <option>HUMSS</option>
+                <option>GAS</option>
+                <option>TVL</option>
+                <option>Arts and Design</option>
+                <option>Sports</option>
+            </select>
+
+            <label>Status:</label>
+            <select id="reportStatus">
+                <option value="">All Statuses</option>
+                <option>Active</option>
+                <option>Inactive</option>
+                <option>Graduated</option>
+            </select>
+
+            <button id="printReport">Print Report</button>
+
+            <p>Total Records: <span id="reportTotal">0</span></p>
+            <p>Active Students: <span id="reportActive">0</span></p>
+            <p>Grade 11: <span id="report11">0</span></p>
+            <p>Grade 12: <span id="report12">0</span></p>
+
+            <h4>Students by Strand</h4>
+            <div id="strandChart"></div>
+
+            <h4>Report Details</h4>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Grade</th>
+                        <th>Strand</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="reportTable"></tbody>
+            </table>
+        </section>
+
+        <!-- User Management -->
+        <section id="users" class="page hidden">
+            <h3>User Management</h3>
+            <button id="addUserBtn">Add User</button>
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTable"></tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Add/Edit User Form -->
+    <dialog id="userDialog">
+        <form id="userForm">
+            <h3 id="userDialogTitle">Add User</h3>
+            <input type="hidden" id="userOriginal">
+
+            <label>Username:</label>
+            <input id="newUsername" required>
+            <br><br>
+
+            <label>Full Name:</label>
+            <input id="newFullName" required>
+            <br><br>
+
+            <label>Role:</label>
+            <select id="newRole">
+                <option>Administrator</option>
+                <option>Registrar</option>
+                <option>Teacher</option>
+                <option>Staff</option>
+            </select>
+            <br><br>
+
+            <label>Status:</label>
+            <select id="newUserStatus">
+                <option>Active</option>
+                <option>Inactive</option>
+            </select>
+            <br><br>
+
+            <button type="submit">Save User</button>
+            <button type="button" id="cancelUser">Cancel</button>
+        </form>
+    </dialog>
+
+    <script src="script.js"></script>
+</body>
+</html>

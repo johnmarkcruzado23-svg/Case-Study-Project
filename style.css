@@ -1,0 +1,27 @@
+
+/* Basic system styles */
+
+.hidden {
+    display: none;
+}
+
+.page {
+    margin-top: 20px;
+}
+
+nav button {
+    margin: 3px;
+}
+
+table {
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 5px;
+}
+
+input, select, textarea {
+    margin: 2px;
+}
